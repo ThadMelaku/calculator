@@ -1,0 +1,66 @@
+html,body{
+    margin:0px;
+    height: 100%;
+}
+.container{
+    background-color: blue;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: auto;
+}
+.wrap1{
+    background-color:red;
+}
+.wrap2{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    
+}
+.calculator{
+    height: 60vh;
+    width: 40vh;
+    border: 10px red solid;
+    border-radius: 8px;
+    display:grid;
+    grid-template-columns: repeat(3,1fr);
+    background-color: lightgrey;
+    color: black;
+    font-weight: 900;
+}
+#display{
+    border: 10px red solid;
+    border-radius: 8px;
+    height:12vh;
+    width:40vh;
+    font-size: 50px;
+    color:black;
+    background-color: lightgrey;
+
+    display: flex;
+    align-items:center;
+    justify-content: right;
+}
+#zero, #one, #two, #three, #four, #five, #six, #seven, #eight, #nine, #add, #subtract, #multiply, #divide, #equals, #clear{
+    /*background-color: aqua;*/
+    display:flex;
+    height: auto;
+    align-items:center;
+    justify-content: center;
+    font-size: 50px;
+    border: 2px black solid;
+}
+#equals{
+    grid-column-start: 3;
+    grid-column-end: 4;
+    grid-row-start:5;
+    grid-row-end: 7;
+}
+#clear{
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
