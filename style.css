@@ -49,7 +49,7 @@ html,body{
     justify-content: right;
     
 }
-#zero, #one, #two, #three, #four, #five, #six, #seven, #eight, #nine, #add, #subtract, #multiply, #divide, #equals, #clear{
+.numbers, .operators, #clear{
     display:flex;
     height: auto;
     align-items:center;
