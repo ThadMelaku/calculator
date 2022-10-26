@@ -4,6 +4,7 @@ let number2 = 0;
 let current_operator;
 let sign = null;
 let prevClickOperator = false; //keeps track of whether the previous click was an operator
+let prevClickEquals = false;
 
 const screenDisplay = document.getElementById("display")
 screenDisplay.textContent = displayValue;
@@ -32,9 +33,8 @@ function updateNumbers(num){
         displayValue = num;
         screenDisplay.textContent = displayValue;
     }
-    //We attach the value of the next digit to number1 
-    //Example: "5" becomes "58"
-    else if(!(number1==0)&&(number2==0)&&!(prevClickOperator)){
+    //We attach the value of the next digit to number1. Example: "5" becomes "58" 
+    else if(!(number1==0)&&(number2==0)&&!(prevClickOperator)&&!(prevClickEquals)){
         number1 += num;
         displayValue += num;
         screenDisplay.textContent = displayValue;
@@ -49,18 +49,21 @@ function updateNumbers(num){
         number2 += num;
         displayValue += num;
         screenDisplay.textContent = displayValue;
-    }
+    }    
     prevClickOperator = false;
+    prevClickEquals = false;
 }
 
 function display(operator){
     sign = operator;
+    if (prevClickEquals && !(prevClickOperator)) swapNums(); 
     //We perform an operation using our 2 numbers and current_operator
-    if(!(number1==0)&&!(number2==0)){
-        number1 = operate(Number(number1),current_operator,Number(number2));
-        displayValue = number1;
+    else if(!(number1==0)&&!(number2==0)){
+        displayValue = number1 = operate(Number(number1),current_operator,Number(number2));
         screenDisplay.textContent = displayValue;
         number2 = 0;
+        if(sign =="equals") prevClickEquals = true;
+        else prevClickEquals = false;
     }
      //Displays an error message if user tries to divide by 0
     else if(current_operator == "/" && number2 == 0){
@@ -70,6 +73,8 @@ function display(operator){
     else{
         if(sign =="/") sign = "÷";
         if(sign =="*") sign = "×";
+        if(sign =="equals") { sign = "="; prevClickEquals = true;}
+        else prevClickEquals = false;
         displayValue = sign;
         screenDisplay.textContent = displayValue;
     }
@@ -79,9 +84,12 @@ function display(operator){
 //clears the screen and resets all stored values
 function clearAll(){
     sign = current_operator =  null;
-    number1 = number2 = 0;
-    displayValue = 0;
-    screenDisplay.textContent = displayValue;
+    screenDisplay.textContent = displayValue = number1 = number2 = 0;
+    prevClickOperator = true; 
+}
+function swapNums(){
+    screenDisplay.textContent = displayValue = number1 = number2;
+    number2 = 0;
     prevClickOperator = true; 
 }
 //Evaluates the two numbers using the operator
