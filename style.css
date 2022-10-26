@@ -35,6 +35,7 @@ html,body{
 
 }
 #display{
+    
     border: 20px black solid;
     border-radius: 8px;
     margin-bottom: -16px;
@@ -47,7 +48,23 @@ html,body{
     display: flex;
     align-items:center;
     justify-content: right;
+    border-top:0;
     
+}
+#display2{
+    border: 20px black solid;
+    border-radius: 8px;
+    margin-bottom: -16px;
+    height:40px;
+    width:400px;
+    font-size: 20px;
+    box-sizing: border-box;
+    color:black;
+    background-color: grey;
+    display: flex;
+    align-items:center;
+    justify-content: right;
+    border-bottom:0;
 }
 .numbers, .operators, #clear{
     display:flex;
