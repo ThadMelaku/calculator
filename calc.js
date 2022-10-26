@@ -41,12 +41,12 @@ function updateNumbers(num){
     //number1 has a set value so now we give number2 a value
     else if(!(number1=="")&&(number2=="")&& prevClickOperator){
         screenDisplay.textContent = displayValue = number2 = num;
-        smallDisplay.textContent = number1+current_operator+number2;
+        smallDisplay.textContent = number1+sign+number2;
     }
     //We attach the value of the next digit to number2
     else if(!(number1=="")&&!(number2=="")&& !(prevClickOperator)){
         screenDisplay.textContent = displayValue = number2 += num;
-        smallDisplay.textContent = number1+current_operator+number2;
+        smallDisplay.textContent = number1+sign+number2;
     }    
     prevClickOperator = false;
 }
@@ -73,8 +73,7 @@ function display(operator){
         number2 = "";
     }
     else{
-        displayValue = sign;
-        screenDisplay.textContent = displayValue;
+        screenDisplay.textContent = displayValue = sign;
         smallDisplay.textContent = number1+sign;
     }
     current_operator = operator;
@@ -86,12 +85,6 @@ function clearAll(){
     number1 = number2 = "";
     screenDisplay.textContent = displayValue = 0;
     smallDisplay.textContent = 0;
-    prevClickOperator = true; 
-}
-function swapNums(){
-    screenDisplay.textContent = displayValue = number1 = number2;
-    smallDisplay.textContent = number1+current_operator;
-    number2 = "";
     prevClickOperator = true; 
 }
 //Evaluates the two numbers using the operator
