@@ -8,12 +8,15 @@ let prevClickOperator = false; //true if the previous click was an operator
 const screenDisplay = document.getElementById("display")
 const smallDisplay = document.getElementById("display2")
 const clear = document.getElementById("clear");
+const backspace = document.getElementById("back");
+
 const numbers = document.querySelectorAll(".numbers");
 const operators = document.querySelectorAll(".operators");
 
 screenDisplay.textContent = displayValue;
 smallDisplay.textContent = displayValue;
 clear.addEventListener('click', () => clearAll());
+backspace.addEventListener('click', () => deleteNum());
 
 numbers.forEach((number) => {
     number.addEventListener('click', () => {   
@@ -22,7 +25,7 @@ numbers.forEach((number) => {
 });
 operators.forEach((operator) => {
     operator.addEventListener('click', () => {
-        display(operator.id);
+        display(operator.value);
     });
 });
 
@@ -65,7 +68,8 @@ function display(operator){
         }
         else{
             number1 = operate(Number(number1),current_operator,Number(number2));
-            displayValue = number1;
+            displayValue = number1 = String(number1);
+            console.log("num1:" +number1);
             screenDisplay.textContent = displayValue;
             if(sign=="=") smallDisplay.textContent = displayValue;
             else smallDisplay.textContent = displayValue+sign;
@@ -87,6 +91,31 @@ function clearAll(){
     smallDisplay.textContent = 0;
     prevClickOperator = true; 
 }
+function deleteNum(){
+    //delete a digit off of number2
+    if((number1.length>0)&&(number2.length>0)){
+        if(number2.length>1) number2=number2.slice(0,-1);
+        else number2 = "";
+        screenDisplay.textContent = displayValue = number2;
+        smallDisplay.textContent = number1+sign+number2;
+    }
+    //delete the operator
+    else if((number1.length>0)&&(number2.length==0)&&!(sign==null)){
+        sign=null;
+        smallDisplay.textContent = number1;
+        screenDisplay.textContent = number1;
+    }
+    //delete a digit off of number 1
+    else if((number1.length>0)&&(number2.length==0)){
+        if(number1.length>1) number1=number1.slice(0,-1);
+        else number1 = "";
+        screenDisplay.textContent = displayValue = number1;
+        smallDisplay.textContent = number1;
+    }
+    
+
+}
+
 //Evaluates the two numbers using the operator
 function operate(num1,operator,num2){
     if (operator === "+") return add(num1,num2);
