@@ -4,12 +4,11 @@ let number2 = "";
 let current_operator;
 let sign = null;
 let prevClickOperator = false; //true if the previous click was an operator
-
+let justDeletedNum2 = false; //true when the last digit of number2 is deleted
 const screenDisplay = document.getElementById("display")
 const smallDisplay = document.getElementById("display2")
 const clear = document.getElementById("clear");
 const backspace = document.getElementById("back");
-
 const numbers = document.querySelectorAll(".numbers");
 const operators = document.querySelectorAll(".operators");
 
@@ -31,18 +30,18 @@ operators.forEach((operator) => {
 
 function updateNumbers(num){
     //We assign a value to number1
-    if(number1==""||displayValue==""||sign=="="){
+    if((number1==""||sign=="=")&& !(justDeletedNum2)){
         screenDisplay.textContent = displayValue = number1 = num;
         smallDisplay.textContent = displayValue;
         sign=null;
     }
     //We attach the value of the next digit to number1. Example: "5" becomes "58" 
-    else if(!(number1=="")&&(number2=="")&&!(prevClickOperator)){
+    else if(!(number1=="")&&(number2=="")&&!(prevClickOperator)&&!(justDeletedNum2)){
         screenDisplay.textContent = displayValue = number1 += num;
         smallDisplay.textContent = displayValue;
     }
     //number1 has a set value so now we give number2 a value
-    else if(!(number1=="")&&(number2=="")&& prevClickOperator){
+    else if((!(number1=="")&&(number2=="")&&prevClickOperator)||(justDeletedNum2)){
         screenDisplay.textContent = displayValue = number2 = num;
         smallDisplay.textContent = number1+sign+number2;
     }
@@ -52,6 +51,7 @@ function updateNumbers(num){
         smallDisplay.textContent = number1+sign+number2;
     }    
     prevClickOperator = false;
+    justDeletedNum2 = false;
 }
 
 function display(operator){
@@ -69,7 +69,6 @@ function display(operator){
         else{
             number1 = operate(Number(number1),current_operator,Number(number2));
             displayValue = number1 = String(number1);
-            console.log("num1:" +number1);
             screenDisplay.textContent = displayValue;
             if(sign=="=") smallDisplay.textContent = displayValue;
             else smallDisplay.textContent = displayValue+sign;
@@ -92,30 +91,31 @@ function clearAll(){
     prevClickOperator = true; 
 }
 function deleteNum(){
-    //delete a digit off of number2
+    //deletes a digit off of number2
     if((number1.length>0)&&(number2.length>0)){
         if(number2.length>1) number2=number2.slice(0,-1);
-        else number2 = "";
+        else {
+            number2 = "";
+            justDeletedNum2=true;
+        }
         screenDisplay.textContent = displayValue = number2;
         smallDisplay.textContent = number1+sign+number2;
     }
-    //delete the operator
-    else if((number1.length>0)&&(number2.length==0)&&!(sign==null)){
+    //deletes the operator
+    else if((number1.length>0)&&(number2.length==0)&&!(current_operator==null)){
+        current_operator=null;
         sign=null;
         smallDisplay.textContent = number1;
         screenDisplay.textContent = number1;
     }
-    //delete a digit off of number 1
+    //deletes a digit off of number1
     else if((number1.length>0)&&(number2.length==0)){
         if(number1.length>1) number1=number1.slice(0,-1);
         else number1 = "";
         screenDisplay.textContent = displayValue = number1;
         smallDisplay.textContent = number1;
     }
-    
-
 }
-
 //Evaluates the two numbers using the operator
 function operate(num1,operator,num2){
     if (operator === "+") return add(num1,num2);
