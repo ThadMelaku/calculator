@@ -5,6 +5,8 @@ let current_operator;
 let sign = null;
 let prevClickOperator = false; //true if the previous click was an operator
 let justDeletedNum2 = false; //true when the last digit of number2 is deleted
+let num1HasDecimal = false; 
+let num2HasDecimal = false;
 const screenDisplay = document.getElementById("display")
 const smallDisplay = document.getElementById("display2")
 const clear = document.getElementById("clear");
@@ -29,31 +31,42 @@ operators.forEach((operator) => {
 });
 
 function updateNumbers(num){
+    checkIfNumbersHaveDecimal();
+    let condition1 = !(num=="." && num1HasDecimal);//limit each number to 1 decimal
+    let condition2 = !(num=="." && num2HasDecimal);
     //We assign a value to number1
     if((number1==""||sign=="=")&& !(justDeletedNum2)){
-        screenDisplay.textContent = displayValue = number1 = num;
-        smallDisplay.textContent = displayValue;
-        sign=null;
+        if(condition1){
+            screenDisplay.textContent = displayValue = number1 = num;
+            smallDisplay.textContent = displayValue;
+            sign=null;
+        }
     }
     //We attach the value of the next digit to number1. Example: "5" becomes "58" 
-    else if(!(number1=="")&&(number2=="")&&!(prevClickOperator)&&!(justDeletedNum2)){
-        screenDisplay.textContent = displayValue = number1 += num;
-        smallDisplay.textContent = displayValue;
+    else if(!(number1=="")&&(number2=="")&&!(prevClickOperator)&&!(justDeletedNum2)||(sign==null)){
+        if(condition1){
+            screenDisplay.textContent = displayValue = number1 += num;
+            smallDisplay.textContent = displayValue;
+        }
     }
     //number1 has a set value so now we give number2 a value
     else if((!(number1=="")&&(number2=="")&&prevClickOperator)||(justDeletedNum2)){
-        screenDisplay.textContent = displayValue = number2 = num;
-        smallDisplay.textContent = number1+sign+number2;
+        if(condition2){
+            screenDisplay.textContent = displayValue = number2 = num;
+            smallDisplay.textContent = number1+sign+number2;
+        }
     }
     //We attach the value of the next digit to number2
     else if(!(number1=="")&&!(number2=="")&& !(prevClickOperator)){
-        screenDisplay.textContent = displayValue = number2 += num;
-        smallDisplay.textContent = number1+sign+number2;
+        if(condition2){
+            screenDisplay.textContent = displayValue = number2 += num;
+            smallDisplay.textContent = number1+sign+number2;
+        }
     }    
     prevClickOperator = false;
     justDeletedNum2 = false;
+    checkIfNumbersHaveDecimal();
 }
-
 function display(operator){
     sign = operator;
     if(sign =="/") sign = "÷";
@@ -64,14 +77,20 @@ function display(operator){
         //Displays an error message if user tries to divide by 0
         if(current_operator == "/" && (number2 == 0) &&!(prevClickOperator)){
             screenDisplay.textContent = displayValue = "Error";
-            smallDisplay.textContent = number1+current_operator+number2;
+            smallDisplay.textContent = number1+"÷"+number2;
         }
         else{
-            number1 = operate(Number(number1),current_operator,Number(number2));
-            displayValue = number1 = String(number1);
-            screenDisplay.textContent = displayValue;
-            if(sign=="=") smallDisplay.textContent = displayValue;
-            else smallDisplay.textContent = displayValue+sign;
+            if(!(number2==".")){
+                number1 = operate(Number(number1),current_operator,Number(number2));
+                displayValue = number1 = String(number1);
+                screenDisplay.textContent = displayValue;
+                if(sign=="=") smallDisplay.textContent = displayValue;
+                else smallDisplay.textContent = displayValue+sign;
+            }
+            else{
+                screenDisplay.textContent = displayValue = sign;
+                smallDisplay.textContent = number1+sign;
+            }
         }
         number2 = "";
     }
@@ -81,14 +100,7 @@ function display(operator){
     }
     current_operator = operator;
     prevClickOperator = true;
-}
-//clears the screen and resets all stored values
-function clearAll(){
-    sign = current_operator =  null;
-    number1 = number2 = "";
-    screenDisplay.textContent = displayValue = 0;
-    smallDisplay.textContent = 0;
-    prevClickOperator = true; 
+    checkIfNumbersHaveDecimal()
 }
 function deleteNum(){
     //deletes a digit off of number2
@@ -102,11 +114,23 @@ function deleteNum(){
         smallDisplay.textContent = number1+sign+number2;
     }
     //deletes the operator
-    else if((number1.length>0)&&(number2.length==0)&&!(current_operator==null)){
-        current_operator=null;
-        sign=null;
-        smallDisplay.textContent = number1;
-        screenDisplay.textContent = number1;
+    else if((number1.length>0)&&(number2.length==0)&&!(sign==null)){
+        //User just clicked "equals" so there is no operator to delete. We delete from number1 instead.
+        if(sign=="="){
+            if(number1.length>1) number1=number1.slice(0,-1);
+            else number1 = "";
+            current_operator= sign =null;
+            smallDisplay.textContent = number1;
+            screenDisplay.textContent = number1;
+        }
+        //We delete the operator
+        else{
+            current_operator= sign =null;
+            smallDisplay.textContent = number1;
+            screenDisplay.textContent = number1;
+            justDeletedNum2=false;
+        }
+         
     }
     //deletes a digit off of number1
     else if((number1.length>0)&&(number2.length==0)){
@@ -115,8 +139,19 @@ function deleteNum(){
         screenDisplay.textContent = displayValue = number1;
         smallDisplay.textContent = number1;
     }
+    checkIfNumbersHaveDecimal();
 }
-//Evaluates the two numbers using the operator
+function clearAll(){
+    sign = current_operator =  null;
+    number1 = number2 = "";
+    screenDisplay.textContent = displayValue = 0;
+    smallDisplay.textContent = 0;
+    prevClickOperator = true; 
+}
+function checkIfNumbersHaveDecimal(){
+    number1.includes(".")? num1HasDecimal = true : num1HasDecimal = false;
+    number2.includes(".")? num2HasDecimal = true : num2HasDecimal = false;
+}
 function operate(num1,operator,num2){
     if (operator === "+") return add(num1,num2);
     else if(operator === "-") return subtract(num1,num2);
