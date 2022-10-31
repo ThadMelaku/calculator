@@ -19,6 +19,7 @@ screenDisplay.textContent = displayValue;
 smallDisplay.textContent = displayValue;
 clear.addEventListener('click', () => clearAll());
 backspace.addEventListener('click', () => deleteNum());
+window.addEventListener('keydown', keyboard);
 
 numbers.forEach((number) => {
     number.addEventListener('click', () => {   
@@ -164,3 +165,17 @@ add = (a,b) => a + b;
 subtract = (a,b) => a - b;
 multiply = (a,b) => a * b;
 divide = (a,b) => a / b;
+
+function keyboard(event){
+    let isClear = event.key == "Escape" || event.key == " ";
+    let isNum0to9 = event.key>=0 && event.key<=9
+    let isOperator = event.key=="+"||event.key =="-"||event.key=="*"||event.key =="/"
+    let isEquals = event.key=="=" || event.key=="Enter";
+    let isDelete = event.key == "Backspace"||event.key == "Delete";
+
+    if (isClear) clearAll();
+    else if (isNum0to9 || event.key==".") updateNumbers(event.key);
+    else if (isOperator) display(event.key);
+    else if (isEquals) display("=");
+    else if (isDelete) deleteNum();
+}
