@@ -2,4 +2,4 @@
 
 Try the calculator here:
 
-[Live Demo](https://thadmelaku.github.io/etch-a-sketch/)
+[Live Demo](https://thadmelaku.github.io/calculator/)
