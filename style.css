@@ -139,3 +139,8 @@ html,body{
     background-color: darkred;
     transition:0.3s;
 }
+button:active, #decimal:active, #clear:active,#back:active{
+    color:black;
+    box-shadow: 5px 5px #666;
+    transform: scale(1.1);
+  }

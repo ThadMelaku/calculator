@@ -88,7 +88,7 @@ function display(operator){
                 displayValue = number1 = String(number1);
                 if(number1.length>14) displayValue=number1=number1.substring(0,14);
                 screenDisplay.textContent = displayValue;
-                if(sign=="=") smallDisplay.textContent = displayValue;
+                if(sign=="=") smallDisplay.textContent += "=";
                 else smallDisplay.textContent = displayValue+sign;
             }
             else{
