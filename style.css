@@ -123,3 +123,19 @@ html,body{
     grid-row-start:7;
     grid-row-end: 8;
 }
+.numbers:hover,#decimal:hover{
+    background-color: green;
+    transition:0.3s;
+}
+.operators:hover{
+    background-color: magenta;
+    transition:0.3s;
+}
+#equals:hover{
+    background-color: gold;
+    transition:0.3s;
+}
+#clear:hover,#back:hover{
+    background-color: darkred;
+    transition:0.3s;
+}
